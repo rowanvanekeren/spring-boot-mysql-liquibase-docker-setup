@@ -1,0 +1,24 @@
+version: "3"
+services:
+  mysql-service:
+    image: mysql:8
+    networks:
+      - spring-boot-mysql-network #TODO: need more study into this
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=todo
+  web-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    networks:
+      - spring-boot-mysql-network
+    depends_on:
+      - mysql-service
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
